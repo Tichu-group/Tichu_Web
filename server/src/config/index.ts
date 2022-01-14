@@ -1,1 +1,1 @@
-export default { httpPort: 5000 };
+export default { httpPort: 5000, apiPrefix: '/api' };

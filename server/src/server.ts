@@ -1,12 +1,14 @@
 import http from 'http';
-import express from 'express';
+import express, { Express } from 'express';
 import { Server as IOServer } from 'socket.io';
 import config from './config';
 import GameManager from './managers/gameManager';
+import mainRouter from './routes';
+import { Connection, createConnection } from 'typeorm';
 
 class Server {
   public httpServer: http.Server;
-  public app: Express.Application;
+  public app: Express;
   public io: IOServer;
   public managers: { gameManager: GameManager };
 
@@ -17,11 +19,11 @@ class Server {
     this.managers = { gameManager: new GameManager() };
   }
 
-  public async prepareDB() {}
+  public addExpressHandlers(connection: Connection) {
+    this.app.use(config.apiPrefix, mainRouter);
+  }
 
-  public addExpressHandlers() {}
-
-  public addSocketHandlers() {}
+  public addSocketHandlers(connection: Connection) {}
 
   public listen() {
     this.httpServer.listen(config.httpPort, () => {
@@ -38,11 +40,11 @@ class Server {
   public static async start() {
     const server = new Server();
 
-    const connection = await server.prepareDB();
+    const connection = await createConnection(config.ormConfig);
 
-    server.addExpressHandlers();
+    server.addExpressHandlers(connection);
 
-    server.addSocketHandlers();
+    server.addSocketHandlers(connection);
 
     server.listen();
   }
