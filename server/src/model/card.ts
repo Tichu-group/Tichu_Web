@@ -1,3 +1,8 @@
+/**
+ * Tichu cards
+ * https://namu.wiki/w/%ED%8B%B0%EC%B8%84
+ */
+
 export enum cardCombinations {
     SINGLE = 'single',
     PAIR = 'pair',
@@ -87,3 +92,4 @@ export class CardCombination {
     // 조합 별 세기 비교 => 부등호로
 
 }
+

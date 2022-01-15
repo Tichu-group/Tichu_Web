@@ -1,18 +1,29 @@
 import http from 'http';
-import express from 'express';
+import express, { Express } from 'express';
 import { Server as IOServer } from 'socket.io';
 import config from './config';
+import GameManager from './managers/gameManager';
+import mainRouter from './routes';
+import { Connection, createConnection } from 'typeorm';
 
 class Server {
-  private httpServer: http.Server;
-  private app: Express.Application;
-  private io: IOServer;
+  public httpServer: http.Server;
+  public app: Express;
+  public io: IOServer;
+  public managers: { gameManager: GameManager };
 
   constructor() {
     this.app = express();
     this.httpServer = http.createServer(this.app);
     this.io = new IOServer(this.httpServer, { cors: { origin: '*' } });
+    this.managers = { gameManager: new GameManager() };
   }
+
+  public addExpressHandlers(connection: Connection) {
+    this.app.use(config.apiPrefix, mainRouter);
+  }
+
+  public addSocketHandlers(connection: Connection) {}
 
   public listen() {
     this.httpServer.listen(config.httpPort, () => {
@@ -26,8 +37,15 @@ class Server {
     this.httpServer.close();
   }
 
-  public static start() {
+  public static async start() {
     const server = new Server();
+
+    const connection = await createConnection(config.ormConfig);
+
+    server.addExpressHandlers(connection);
+
+    server.addSocketHandlers(connection);
+
     server.listen();
   }
 }
