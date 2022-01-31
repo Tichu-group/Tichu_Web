@@ -1,3 +1,4 @@
+// eslint-disable
 import http from 'http';
 import express, { Express } from 'express';
 import { Server as IOServer } from 'socket.io';
@@ -19,11 +20,14 @@ class Server {
     this.managers = { gameManager: new GameManager() };
   }
 
-  public addExpressHandlers(connection: Connection) {
+  public addExpressHandlers(_: Connection) {
+    this.app.get('/', (_, res) => {
+      res.send('Tichu api server');
+    });
     this.app.use(config.apiPrefix, mainRouter);
   }
 
-  public addSocketHandlers(connection: Connection) {}
+  public addSocketHandlers(_: Connection) {}
 
   public listen() {
     this.httpServer.listen(config.httpPort, () => {
@@ -39,6 +43,8 @@ class Server {
 
   public static async start() {
     const server = new Server();
+
+    console.log(config.ormConfig);
 
     const connection = await createConnection(config.ormConfig);
 
