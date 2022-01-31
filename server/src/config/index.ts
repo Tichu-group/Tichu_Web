@@ -26,5 +26,13 @@ const ormConfig: ConnectionOptions = {
 export default {
   httpPort: Number(process.env.HTTP_PORT),
   apiPrefix: '/api',
-  ormConfig
+  ormConfig,
+  secret: {
+    session: process.env.SESSION_SECRET ?? 'session-secret',
+    kakao: {
+      clientID: process.env.KAKAO_CLIENT_ID ?? 'kakao-client-id',
+      clientSecret: process.env.KAKAO_CLIENT_SECRET ?? 'kakao-client-secret',
+      callbackUrl: process.env.KAKAO_CALLBACK_URL ?? 'kakao-client-url'
+    }
+  }
 };
