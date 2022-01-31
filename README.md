@@ -12,6 +12,8 @@ Create website for playing Tichu
 | node | 14.17.3| For running react & server |
 | npm | 8.1.3 | optional I guess |
 | yarn | 1.22.17 | package manager we use |
+| docker | 20.10.7 | Docker |
+| docker-compose | 1.29.2 | Docker Compose |
 
 
 ## Client (Web)
@@ -30,10 +32,8 @@ yarn start
 ```sh
 ## Go to server directory
 cd server
-## install packages
-yarn
-## start server at localhost:5000 with nodemon
-yarn dev
+## Run Server on localhost:8000
+docker-compose up
 ```
 
 WIP: will dockerize the server
