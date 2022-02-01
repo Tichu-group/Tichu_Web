@@ -10,11 +10,10 @@ try {
 
 const ormConfig: ConnectionOptions = {
   type: 'postgres',
-  host: 'db',
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
+  host: 'postgres',
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
   synchronize: true,
   logging: true,
   dropSchema: true,
