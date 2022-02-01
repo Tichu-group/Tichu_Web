@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
+import LoginButton from './components/button/loginButton';
 
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return <LoginButton />;
 }
 
 export default App;

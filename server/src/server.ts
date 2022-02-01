@@ -2,10 +2,18 @@
 import http from 'http';
 import express, { Express } from 'express';
 import { Server as IOServer } from 'socket.io';
+import { Connection, createConnection } from 'typeorm';
+import session from 'express-session';
+import cors from 'cors';
+
+import passport from 'passport';
+
+import initializePassport from './passport';
 import config from './config';
 import GameManager from './managers/gameManager';
 import mainRouter from './routes';
-import { Connection, createConnection } from 'typeorm';
+import SessionEntity from './entity/session.entity';
+import { TypeormStore } from 'typeorm-store';
 
 class Server {
   public httpServer: http.Server;
@@ -20,11 +28,36 @@ class Server {
     this.managers = { gameManager: new GameManager() };
   }
 
-  public addExpressHandlers(_: Connection) {
+  public addExpressHandlers(connection: Connection) {
+    // Add middlewares
+    this.app.use(express.json());
+    this.app.use(cors());
+
+    this.app.use((req, _, next) => {
+      console.log(req.url);
+      next();
+    });
+
+    const sessionRepository = connection.getRepository(SessionEntity);
+    this.app.use(
+      session({
+        secret: config.secret.session,
+        saveUninitialized: false,
+        resave: false,
+        store: new TypeormStore({ repository: sessionRepository })
+      })
+    );
+
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
+    initializePassport();
+
+    // Add Routers
     this.app.get('/', (_, res) => {
       res.send('Tichu api server');
     });
-    this.app.use(config.apiPrefix, mainRouter);
+
+    this.app.use(config.apiPrefix, mainRouter(this));
   }
 
   public addSocketHandlers(_: Connection) {}
@@ -44,7 +77,9 @@ class Server {
   public static async start() {
     const server = new Server();
 
-    console.log(config.ormConfig);
+    console.log('/////////// Server Configuration /////////');
+    console.log(config);
+    console.log('////////////////////////////////////////////');
 
     const connection = await createConnection(config.ormConfig);
 
