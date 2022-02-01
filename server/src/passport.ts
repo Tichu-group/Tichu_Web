@@ -4,6 +4,12 @@ import {
   Strategy as KakaoStrategy,
   Profile as KakaoProfile
 } from 'passport-kakao';
+import {
+  Strategy as GoogleStrategy,
+  Profile as GoogleProfile,
+  VerifyCallback as GoogleVerifyCallback
+} from 'passport-google-oauth20';
+
 import config from './config';
 import UserEntity from './entity/user.entity';
 import { OAuthProvider } from './types/auth.type';
@@ -50,6 +56,41 @@ export default () => {
               throw new Error('no username');
             }
             newUser.userName = profile.username ?? 'unknown user';
+            newUser.oAuthProvider = profile.provider as OAuthProvider;
+            console.log('2');
+            cb(null, await newUser.save());
+          } else {
+            cb(null, user);
+          }
+        });
+      }
+    )
+  );
+
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: config.secret.google.clientID,
+        clientSecret: config.secret.google.clientSecret,
+        callbackURL: config.secret.google.callbackUrl
+      },
+      (
+        accessToken: string,
+        refreshToken: string,
+        profile: GoogleProfile,
+        cb: GoogleVerifyCallback
+      ) => {
+        console.log('google auth: ', accessToken, refreshToken, profile);
+        UserEntity.findOne({
+          where: { oAuthId: profile.id, oAuthProvider: 'google' }
+        }).then(async user => {
+          if (user === undefined) {
+            const newUser = new UserEntity();
+            newUser.oAuthId = profile.id;
+            if (!profile.displayName) {
+              throw new Error('no username');
+            }
+            newUser.userName = profile.displayName ?? 'unknown user';
             newUser.oAuthProvider = profile.provider as OAuthProvider;
             console.log('2');
             cb(null, await newUser.save());

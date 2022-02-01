@@ -1,1 +1,1 @@
-export type OAuthProvider = 'kakao';
+export type OAuthProvider = 'kakao' | 'google' | 'facebook';
