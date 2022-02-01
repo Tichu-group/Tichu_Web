@@ -8,8 +8,8 @@ export default () => {
   router.get(
     '/kakao/callback',
     passport.authenticate('kakao', {
-      failureRedirect: '/',
-      successRedirect: '/'
+      failureRedirect: '/fail',
+      successRedirect: '/success'
     })
   );
   return router;
