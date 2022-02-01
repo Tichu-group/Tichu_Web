@@ -1,5 +1,15 @@
 version: '3.9'
 services:
+  postgres:
+    build: 
+      context: pg
+      dockerfile: pg.dev.dockerfile
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./pg/dev/data:/var/lib/postgresql/data
+
   nginx:
     restart: always
     build:
@@ -32,14 +42,4 @@ services:
       - ./server:/usr/app
     depends_on:
       - postgres
-    command: ["yarn", "dev"]
-
-  postgres:
-    build: 
-      context: pg
-      dockerfile: pg.dev.dockerfile
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - ./pg/dev/data:/var/lib/postgresql/data
+    command: ["sh", "entrypoint.sh"]
