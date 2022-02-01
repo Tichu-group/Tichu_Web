@@ -16,7 +16,7 @@ Create website for playing Tichu
 ## Development Environment
 
 ```sh
-## run docker compose for dev env
+## run docker compose for dev env at http://localhost (port 80)
 docker-compose up
 ```
 
