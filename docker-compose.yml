@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: nginx.dev.dockerfile
+      context: ./nginx
+    volumes:
+      - ./nginx/logs:/var/log/nginx
+    ports:
+      - "80:80"
+
+  react-front:
+    build: 
+      dockerfile: client.dev.dockerfile
+      context: client
+    env_file:
+      - .env
+    volumes:
+      - /usr/app/node_modules
+      - ./client:/usr/app
+    command: ["yarn", "start"]
+
+  node-back:
+    build:
+      context: server
+      dockerfile: server.dev.dockerfile
+    env_file:
+      - .env
+    volumes:
+      - /usr/app/node_modules
+      - ./server:/usr/app
+    depends_on:
+      - postgres
+    command: ["yarn", "dev"]
+
+  postgres:
+    build: 
+      context: pg
+      dockerfile: pg.dev.dockerfile
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./pg/dev/data:/var/lib/postgresql/data

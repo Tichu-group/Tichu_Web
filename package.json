@@ -1,0 +1,12 @@
+{
+  "name": "tichu-web",
+  "version": "1.0.0",
+  "description": "Tichu Website",
+  "main": "index.js",
+  "repository": "https://github.com/jirheee/Tichu_Web",
+  "author": "JungInRhee <ysrheee@kaist.ac.kr>",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "mkdir pg/dev/data && mkdir nginx/logs"
+  }
+}
