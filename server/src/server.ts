@@ -60,7 +60,9 @@ class Server {
     this.app.use(config.apiPrefix, mainRouter(this));
   }
 
-  public addSocketHandlers(_: Connection) {}
+  public addSocketHandlers(_: Connection) {
+    console.log('!! Add socket handlers !!');
+  }
 
   public listen() {
     this.httpServer.listen(config.httpPort, () => {
