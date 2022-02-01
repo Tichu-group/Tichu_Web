@@ -24,7 +24,7 @@ function App() {
       <button
         style={{ backgroundColor: 'white' }}
         onClick={() => {
-          window.location.pathname = '/api/auth/google';
+          window.location.pathname = '/api/auth/facebook';
         }}
       >
         FB Login

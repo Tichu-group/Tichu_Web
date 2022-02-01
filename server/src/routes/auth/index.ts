@@ -12,5 +12,27 @@ export default () => {
       successRedirect: '/success'
     })
   );
+
+  router.get(
+    '/google',
+    passport.authenticate('google', { scope: ['profile'] })
+  );
+  router.get(
+    '/google/callback',
+    passport.authenticate('google', {
+      failureRedirect: '/fail',
+      successRedirect: '/success'
+    })
+  );
+
+  router.get('/facebook', passport.authenticate('facebook'));
+  router.get(
+    '/facebook/callback',
+    passport.authenticate('facebook', {
+      failureRedirect: '/fail',
+      successRedirect: '/success'
+    })
+  );
+
   return router;
 };
