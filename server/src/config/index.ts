@@ -32,6 +32,17 @@ export default {
       clientID: process.env.KAKAO_CLIENT_ID ?? 'kakao-client-id',
       clientSecret: process.env.KAKAO_CLIENT_SECRET ?? 'kakao-client-secret',
       callbackUrl: process.env.KAKAO_CALLBACK_URL ?? 'kakao-client-url'
+    },
+    google: {
+      clientID: process.env.GOOGLE_CLIENT_ID ?? 'google-client-id',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? 'google-client-secret',
+      callbackUrl: process.env.GOOGLE_CALLBACK_URL ?? 'google-client-url'
+    },
+    facebook: {
+      clientID: process.env.FACEBOOK_CLIENT_ID ?? 'google-client-id',
+      clientSecret:
+        process.env.FACEBOOK_CLIENT_SECRET ?? 'google-client-secret',
+      callbackUrl: process.env.FACEBOOK_CALLBACK_URL ?? 'google-client-url'
     }
   }
 };

@@ -7,6 +7,6 @@
   "author": "JungInRhee <ysrheee@kaist.ac.kr>",
   "license": "MIT",
   "scripts": {
-    "prepare": "mkdir pg/dev/data && mkdir nginx/logs"
+    "dev": "docker-compose up"
   }
 }
